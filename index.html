@@ -800,11 +800,10 @@
                 <div class="food-title">גחנון</div>
                 <div class="price-badge">50 ₪</div>
               </div>
-              <div class="food-sub">4 יחידות במארז אפוי לאט, רך מבפנים וזהוב מבחוץ. מושלם עם ביצה, עגבנייה וסחוג.</div>
+              <div class="food-sub">4 יחידות במארז </div>
               <div class="food-tags">
                 <span class="food-tag">🔥 הכי נמכר</span>
-                <span class="food-tag recommended">⭐ מומלץ לשבת</span>
-              </div>
+                         </div>
             </div>
             <div class="qty-box">
               <button class="qty-btn" type="button" onclick="changeQty('jachnun', -1)">−</button>
@@ -820,9 +819,9 @@
                 <div class="food-title">קובנה</div>
                 <div class="price-badge">20 ₪</div>
               </div>
-              <div class="food-sub">3 יחידות במארז, אווריריות וחמאתיות עם טעם ביתי שמרגיש כמו שבת אמיתית.</div>
+              <div class="food-sub">3 יחידות במארז, אווריריות וחמאתיות בטעם ביתי.</div>
               <div class="food-tags">
-                <span class="food-tag recommended">🥐 טרי וחם</span>
+                <span class="food-tag recommended">⭐ מומלץ לשבת</span>
               </div>
             </div>
             <div class="qty-box">
@@ -839,7 +838,7 @@
                 <div class="food-title">סחוג</div>
                 <div class="price-badge">10 ₪</div>
               </div>
-              <div class="food-sub">חריפות מדויקת וטעם עשיר שמקפיץ כל ביס של גחנון או קובנה לרמה אחרת.</div>
+              <div class="food-sub">חריפות מדויקת וטעם עשיר שמקפיץ כל ביס לרמה אחרת.</div>
               <div class="food-tags">
                 <span class="food-tag">🌶️ תוספת ממכרת</span>
               </div>
@@ -860,7 +859,7 @@
               <div class="small" id="deliveryPriceText">תוספת 5 ₪ • מסודר, מהיר ונוח</div>
               <div class="delivery-meta">
                 <span class="delivery-pill">ימי משלוח: חמישי–שישי</span>
-                <span class="delivery-pill">אזורי חלוקה: נתניה והסביבה</span>
+                <span class="delivery-pill">אזורי חלוקה: נתניה</span>
               </div>
               <div id="freeDeliveryRibbon" class="free-delivery-ribbon">🎉 משלוח חינם בהזמנה של 150 ₪ ומעלה</div>
             </div>
@@ -895,7 +894,7 @@
           </div>
           <div class="mini">הסכום המעודכן</div>
           <div id="summaryTotal" class="summary-total"><span id="totalPrice">0</span> ₪</div>
-          <div id="freeDeliveryPill" class="free-delivery-pill">🚚 משלוח חינם הופעל</div>
+          <div id="freeDeliveryPill" class="free-delivery-pill">🚚 משלוח חינם </div>
         </div>
 
         <div class="field">
@@ -950,7 +949,7 @@
     <div class="modal-card">
       <div class="modal-icon">🎉</div>
       <h3 id="freeDeliveryTitle">משלוח חינם!</h3>
-      <p>ההזמנה עברה 150 ₪ ומעלה. המשלוח שלך חינם.</p>
+      <p>ההזמנה עברה 150 ₪. המשלוח שלך חינם.</p>
       <button class="modal-btn" type="button" onclick="closeFreeDeliveryModal()">מעולה</button>
     </div>
   </div>
@@ -1047,7 +1046,7 @@
         ribbon.classList.add('show');
         pill.classList.add('show');
       } else {
-        priceText.textContent = 'תוספת 5 ₪ • מסודר, מהיר ונוח';
+        priceText.textContent = 'תוספת 10 ₪ • מסודר, מהיר ונוח';
         ribbon.classList.remove('show');
         pill.classList.remove('show');
       }
@@ -1218,7 +1217,7 @@
       if ((delivery || eligibleForFreeDelivery) && !address){
         toggleAddress(true);
         document.getElementById("address").focus();
-        alert("בהזמנה עם משלוח חינם חובה למלא כתובת למשלוח");
+        alert("בהזמנה עם משלוח חובה למלא כתובת למשלוח");
         return null;
       }
 
