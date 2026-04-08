@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#111827" />
+  <title>הגחנון של חדד</title>
+  <style>
+
+.total-box {
+  position: relative;
+  border-radius: 20px;
+  padding: 20px;
+  color: white;
+  overflow: hidden;
+  
+  background: linear-gradient(135deg, #0f172a, #1e3a5f, #0f172a);
+  background-size: 300% 300%;
+  animation: gradientMove 8s ease infinite;
+}
+
+/* תנועה עדינה של הגרדיאנט */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --brand:#111827;
+      --accent:#f59e0b;
+      --accent-2:#22c55e;
+      --border:#e5e7eb;
+      --shadow:0 10px 25px rgba(17,24,39,.08);
+      --radius:22px;
+      --danger:#ef4444;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:
+        radial-gradient(circle at top right, #fff2d8 0, transparent 28%),
+        linear-gradient(180deg, #fff, var(--bg));
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    .app{
+      max-width:980px;
+      margin:0 auto;
+      padding:18px 14px 44px;
+    }
+
+    .logo-float{
+      position:relative;
+      top:40px;
+      text-align:center;
+      margin-bottom:-58px;
+      z-index:30;
+    }
+
+    .logo-float img{
+      width:250px;
+      height:250px;
+      border-radius:50%;
+      object-fit:cover;
+      box-shadow:0 18px 45px rgba(0,0,0,.18);
+      animation:floatIn .9s ease-out, softFloat 3.8s ease-in-out 1.1s infinite;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      background:
+        linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)),
+        url("dough-bg.png");
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      color:#fff;
+      border-radius:28px;
+      padding:110px 18px 20px;
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+
+    .topbar h1{margin:0 0 6px;font-size:28px}
+    .topbar p{margin:0;color:rgba(255,255,255,.82);line-height:1.45}
+
+    .deadline{
+      display:inline-block;
+      margin-top:10px;
+      background:rgba(245,158,11,.16);
+      color:#fde68a;
+      border:1px solid rgba(245,158,11,.25);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:16px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:16px;
+    }
+
+    .card h2{
+      margin:0 0 14px;
+      font-size:22px;
+    }
+
+    .menu-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .menu-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:20px;
+      padding:10px;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .menu-item:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 22px rgba(17,24,39,.08);
+      border-color:#d1d5db;
+    }
+
+    .food-thumb{
+      width:96px;
+      height:96px;
+      flex:0 0 96px;
+      border-radius:18px;
+      object-fit:cover;
+      background:#f3f4f6;
+      border:1px solid #eef0f3;
+    }
+
+    .food-info{flex:1;min-width:0}
+
+    .food-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:4px;
+    }
+
+    .food-title{
+      font-size:19px;
+      font-weight:800;
+    }
+
+    .price-badge{
+      background:#fff7ed;
+      color:#b45309;
+      border:1px solid #fed7aa;
+      font-size:13px;
+      padding:5px 9px;
+      border-radius:999px;
+      white-space:nowrap;
+      font-weight:700;
+    }
+
+    .food-sub{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .food-tags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .food-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      font-size:12px;
+      font-weight:800;
+      border-radius:999px;
+      padding:5px 9px;
+      background:#fff7ed;
+      color:#c2410c;
+      border:1px solid #fdba74;
+    }
+
+    .food-tag.recommended{
+      background:#ecfeff;
+      color:#0f766e;
+      border-color:#99f6e4;
+    }
+
+    .qty-box{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      background:#f9fafb;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:5px 7px;
+    }
+
+    .qty-btn{
+      width:34px;
+      height:34px;
+      border:none;
+      border-radius:12px;
+      background:#fff;
+      box-shadow:0 2px 8px rgba(17,24,39,.07);
+      font-size:20px;
+      cursor:pointer;
+      transition:transform .12s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .qty-btn:active,
+    .main-btn:active,
+    .wa-btn:active,
+    .save-btn:active,
+    .chip-btn:active,
+    .modal-btn:active{
+      transform:scale(.94);
+    }
+
+    .qty-btn:hover{background:#fef3c7}
+
+    .qty-input{
+      width:34px;
+      text-align:center;
+      border:none;
+      background:transparent;
+      font-size:18px;
+      font-weight:800;
+      color:var(--brand);
+    }
+
+    .delivery-box{
+      margin-top:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border:1px solid #fde68a;
+      border-radius:22px;
+      background:linear-gradient(135deg,#fffdf8,#fff7ed);
+      padding:16px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 10px 25px rgba(245,158,11,.10);
+    }
+
+    .delivery-main{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      flex:1;
+    }
+
+    .delivery-icon{
+      width:50px;
+      height:50px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      background:#fff;
+      box-shadow:0 8px 18px rgba(17,24,39,.08);
+      flex:0 0 50px;
+    }
+
+    .delivery-title{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:4px;
+    }
+
+    .delivery-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:8px;
+    }
+
+    .delivery-pill{
+      background:#fff;
+      color:#92400e;
+      border:1px solid #fde68a;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .free-delivery-ribbon{
+      display:none;
+      margin-top:8px;
+      background:#ecfdf5;
+      color:#166534;
+      border:1px solid #bbf7d0;
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:13px;
+      font-weight:800;
+      width:max-content;
+      max-width:100%;
+    }
+
+    .free-delivery-ribbon.show{display:inline-block}
+
+    .switch-row{display:flex;align-items:center;gap:10px}
+    .switch-row input{transform:scale(1.2)}
+    .small{font-size:13px;color:var(--muted)}
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+
+    .field-hint{
+      margin-top:6px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .field-error{
+      margin-top:6px;
+      font-size:13px;
+      color:var(--danger);
+      font-weight:700;
+      min-height:18px;
+    }
+
+    .input-error{
+      border-color:#fca5a5 !important;
+      box-shadow:0 0 0 4px rgba(239,68,68,.10) !important;
+    }
+
+    .field{margin-bottom:12px}
+
+    input[type="text"], input[type="tel"], textarea{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px 13px;
+      font-size:16px;
+      outline:none;
+      background:#fff;
+      transition:border-color .18s ease, box-shadow .18s ease;
+    }
+
+    input[type="text"]:focus, input[type="tel"]:focus, textarea:focus{
+      border-color:#fbbf24;
+      box-shadow:0 0 0 4px rgba(245,158,11,.12);
+    }
+
+    textarea{
+      min-height:92px;
+      resize:vertical;
+    }
+
+    .summary-hero{
+      background:linear-gradient(135deg,#111827,#1f2937);
+      color:#fff;
+      border-radius:22px;
+      padding:16px;
+      margin-bottom:14px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .summary-hero .mini{
+      color:rgba(255,255,255,.8);
+      font-size:13px;
+    }
+
+    .summary-total{
+      font-size:30px;
+      font-weight:900;
+      margin-top:6px;
+      color:#fde68a;
+    }
+
+    .free-delivery-pill{
+      display:none;
+      margin-top:10px;
+      width:max-content;
+      background:rgba(34,197,94,.18);
+      color:#bbf7d0;
+      border:1px solid rgba(187,247,208,.28);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .free-delivery-pill.show{display:inline-block}
+
+    .summary-box{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      overflow:hidden;
+    }
+
+    .summary-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid #f1f5f9;
+      font-size:15px;
+    }
+
+    .summary-row:last-child{border-bottom:none}
+
+    .summary-empty{
+      padding:18px 14px;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    .summary-label{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+    }
+
+    .summary-name{font-weight:700}
+    .summary-sub{font-size:12px;color:var(--muted)}
+
+    .total-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px dashed var(--border);
+      font-weight:800;
+      font-size:18px;
+    }
+
+    .actions{display:grid;gap:10px;margin-top:14px}
+
+    .secondary-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    .main-btn,.wa-btn,.save-btn,.chip-btn,.modal-btn{
+      border:none;
+      cursor:pointer;
+      border-radius:16px;
+      padding:15px 16px;
+      font-size:16px;
+      font-weight:800;
+      transition:transform .12s ease, filter .18s ease, box-shadow .18s ease;
+    }
+
+    .main-btn{
+      background:linear-gradient(135deg,#25D366,#16a34a);
+      color:#fff;
+      box-shadow:0 18px 34px rgba(34,197,94,.28);
+      padding:18px 18px;
+      font-size:18px;
+    }
+    .main-btn .btn-sub{display:block;font-size:12px;font-weight:700;opacity:.9;margin-top:4px}
+    .save-btn,.wa-btn{
+      background:#f3f4f6;
+      color:var(--text);
+      font-size:14px;
+      padding:13px 14px;
+      box-shadow:none;
+      border:1px solid var(--border);
+    }
+    .chip-btn{background:#f3f4f6;color:var(--text)}
+    .modal-btn{background:#111827;color:#fff;min-width:140px}
+
+    .main-btn:hover,.wa-btn:hover,.save-btn:hover,.chip-btn:hover,.modal-btn:hover{filter:brightness(.98)}
+
+    .admin-toggle{margin-top:16px}
+    .admin-panel.hidden,.address-fields.hidden,.modal.hidden,.confetti-layer.hidden{display:none}
+
+    .admin-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .admin-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .orders-list{display:grid;gap:12px}
+
+    .order-card{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      background:#fff;
+    }
+
+    .order-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    .order-name{font-weight:800}
+
+    .badge{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fef3c7;
+      color:#92400e;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .empty{
+      padding:18px 14px;
+      text-align:center;
+      color:var(--muted);
+      border:1px dashed var(--border);
+      border-radius:16px;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(17,24,39,.52);
+      backdrop-filter:blur(3px);
+      z-index:999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .modal-card{
+      width:min(420px,100%);
+      background:#fff;
+      border-radius:28px;
+      padding:24px 20px 20px;
+      box-shadow:0 25px 60px rgba(0,0,0,.2);
+      text-align:center;
+      position:relative;
+      animation:popIn .35s ease;
+    }
+
+    .modal-icon{
+      width:84px;
+      height:84px;
+      margin:0 auto 14px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-size:42px;
+      background:linear-gradient(135deg,#fef3c7,#fde68a);
+      box-shadow:0 12px 28px rgba(245,158,11,.22);
+    }
+
+    .modal-card h3{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1.1;
+      color:#111827;
+    }
+
+    .modal-card p{
+      margin:0 0 18px;
+      color:#4b5563;
+      font-size:16px;
+      line-height:1.5;
+    }
+
+    .confetti-layer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:1000;
+    }
+
+    .confetti-piece{
+      position:absolute;
+      top:-20px;
+      width:12px;
+      height:18px;
+      opacity:.95;
+      animation:confettiFall linear forwards;
+      will-change:transform, opacity;
+    }
+
+    @keyframes logoWrapIn{
+      0%{opacity:0; transform:translateY(-16px)}
+      100%{opacity:1; transform:translateY(0)}
+    }
+
+    @keyframes floatIn{
+      0%{transform:translateY(-40px) scale(.82); opacity:0}
+      60%{transform:translateY(10px) scale(1.04); opacity:1}
+      100%{transform:translateY(0) scale(1); opacity:1}
+    }
+
+    @keyframes softFloat{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+    }
+
+    @keyframes popIn{
+      0%{opacity:0; transform:scale(.82) translateY(10px)}
+      100%{opacity:1; transform:scale(1) translateY(0)}
+    }
+
+    @keyframes confettiFall{
+      0%{transform:translate3d(0,0,0) rotate(0deg); opacity:1}
+      100%{transform:translate3d(var(--drift), 110vh, 0) rotate(720deg); opacity:0}
+    }
+
+    @media (max-width:760px){
+      .layout{grid-template-columns:1fr}
+      .topbar h1{font-size:24px}
+      .food-thumb{width:78px;height:78px;flex-basis:78px}
+      .food-title{font-size:17px}
+      .qty-btn{width:32px;height:32px}
+      .qty-input{width:28px}
+      .logo-float img{width:124px;height:124px}
+      .modal-card h3{font-size:26px}
+      .secondary-actions{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="logo-float">
+      <img src="logo.png" alt="לוגו העסק">
+    </div>
+
+    <section class="topbar">
+      <div>
+        <div class="deadline">הזמנות עד יום שלישי בשעה 22:00</div>
+        <div class="deadline">כשר למהדרין באישור הרב מחמוד מקלנסוואה</div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="card">
+        <h2>תפריט</h2>
+
+        <div class="menu-list">
+          <div class="menu-item">
+            <img src="jachnun.png" class="food-thumb" alt="גחנון">
+            <div class="food-info">
+              <div class="food-top">
+                <div class="food-title">גחנון</div>
+                <div class="price-badge">50 ₪</div>
+              </div>
+              <div class="food-sub">4 יחידות במארז אפוי לאט, רך מבפנים וזהוב מבחוץ. מושלם עם ביצה, עגבנייה וסחוג.</div>
+              <div class="food-tags">
+                <span class="food-tag">🔥 הכי נמכר</span>
+                <span class="food-tag recommended">⭐ מומלץ לשבת</span>
+              </div>
+            </div>
+            <div class="qty-box">
+              <button class="qty-btn" type="button" onclick="changeQty('jachnun', -1)">−</button>
+              <input class="qty-input" id="jachnun" type="number" min="0" value="0" onchange="normalizeQty('jachnun'); updateSummary();" />
+              <button class="qty-btn" type="button" onclick="changeQty('jachnun', 1)">+</button>
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <img src="kubaneh.png" class="food-thumb" alt="קובנה">
+            <div class="food-info">
+              <div class="food-top">
+                <div class="food-title">קובנה</div>
+                <div class="price-badge">20 ₪</div>
+              </div>
+              <div class="food-sub">3 יחידות במארז, אווריריות וחמאתיות עם טעם ביתי שמרגיש כמו שבת אמיתית.</div>
+              <div class="food-tags">
+                <span class="food-tag recommended">🥐 טרי וחם</span>
+              </div>
+            </div>
+            <div class="qty-box">
+              <button class="qty-btn" type="button" onclick="changeQty('kubaneh', -1)">−</button>
+              <input class="qty-input" id="kubaneh" type="number" min="0" value="0" onchange="normalizeQty('kubaneh'); updateSummary();" />
+              <button class="qty-btn" type="button" onclick="changeQty('kubaneh', 1)">+</button>
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <img src="sahug.png" class="food-thumb" alt="סחוג">
+            <div class="food-info">
+              <div class="food-top">
+                <div class="food-title">סחוג</div>
+                <div class="price-badge">10 ₪</div>
+              </div>
+              <div class="food-sub">חריפות מדויקת וטעם עשיר שמקפיץ כל ביס של גחנון או קובנה לרמה אחרת.</div>
+              <div class="food-tags">
+                <span class="food-tag">🌶️ תוספת ממכרת</span>
+              </div>
+            </div>
+            <div class="qty-box">
+              <button class="qty-btn" type="button" onclick="changeQty('sahug', -1)">−</button>
+              <input class="qty-input" id="sahug" type="number" min="0" value="0" onchange="normalizeQty('sahug'); updateSummary();" />
+              <button class="qty-btn" type="button" onclick="changeQty('sahug', 1)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="delivery-box">
+          <div class="delivery-main">
+            <div class="delivery-icon">🚚</div>
+            <div>
+              <div class="delivery-title">משלוח עד הבית</div>
+              <div class="small" id="deliveryPriceText">תוספת 5 ₪ • מסודר, מהיר ונוח</div>
+              <div class="delivery-meta">
+                <span class="delivery-pill">ימי משלוח: חמישי–שישי</span>
+                <span class="delivery-pill">אזורי חלוקה: נתניה והסביבה</span>
+              </div>
+              <div id="freeDeliveryRibbon" class="free-delivery-ribbon">🎉 משלוח חינם בהזמנה של 150 ₪ ומעלה</div>
+            </div>
+          </div>
+          <div class="switch-row">
+            <input id="delivery" type="checkbox" onchange="toggleAddress(); updateSummary();" />
+          </div>
+        </div>
+
+        <div id="addressFields" class="address-fields hidden" style="margin-top:12px">
+          <div class="field">
+            <label for="address">כתובת למשלוח</label>
+            <input id="address" type="text" placeholder="רחוב, מספר, עיר" />
+          </div>
+          <div class="field">
+            <label for="notes">הערות למשלוח</label>
+            <textarea id="notes" placeholder="קומה, דירה, שער, נקודת ציון וכד׳"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>סיכום הזמנה</h2>
+
+        <div class="summary-hero">
+          <div class="mini">הסכום המעודכן</div>
+          <div class="summary-total"><span id="totalPrice">0</span> ₪</div>
+          <div id="freeDeliveryPill" class="free-delivery-pill">🚚 משלוח חינם הופעל</div>
+        </div>
+
+        <div class="field">
+          <label for="customerName">שם מלא</label>
+          <input id="customerName" type="text" placeholder="השם שלך" />
+        </div>
+
+        <div class="field">
+          <label for="customerPhone">מספר פלאפון</label>
+          <input id="customerPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="05XXXXXXXX" oninput="handlePhoneInput()" onblur="validatePhoneField(true)" />
+                 <div id="phoneError" class="field-error"></div>
+        </div>
+
+        <div class="summary-box" id="summaryItems">
+          <div class="summary-empty">עדיין לא נבחרו פריטים</div>
+        </div>
+
+        <div class="total-line">
+          <span>סה״כ לתשלום</span>
+          <span><span id="totalBottom">0</span> ₪</span>
+        </div>
+
+        <div class="actions">
+          <button class="main-btn" type="button" onclick="sendWhatsAppOrder()">בצע הזמנה בוואטסאפ<span class="btn-sub">פשוט וקל!</span></button>
+          <div class="secondary-actions">
+            <button class="save-btn" type="button" onclick="saveOrder()">שמור הזמנה במערכת</button>
+            <button class="wa-btn" type="button" onclick="openWhatsApp()">מעבר לוואטסאפ העסק</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="admin-toggle">
+      <button class="chip-btn" type="button" onclick="toggleAdmin()">📊 ניהול הזמנות</button>
+    </div>
+
+    <section id="adminPanel" class="card admin-panel hidden">
+      <div class="admin-head">
+        <h2 style="margin:0">ניהול הזמנות</h2>
+        <div class="admin-actions">
+          <button class="chip-btn" type="button" onclick="exportOrders()">ייצוא CSV</button>
+          <button class="chip-btn" type="button" onclick="clearOrders()">מחיקת כל ההזמנות</button>
+        </div>
+      </div>
+      <div id="ordersList" class="orders-list"></div>
+    </section>
+  </div>
+
+  <div id="confettiLayer" class="confetti-layer hidden" aria-hidden="true"></div>
+
+  <div id="freeDeliveryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="freeDeliveryTitle">
+    <div class="modal-card">
+      <div class="modal-icon">🎉</div>
+      <h3 id="freeDeliveryTitle">משלוח חינם!</h3>
+      <p>ההזמנה עברה 150 ₪ ומעלה. המשלוח שלך חינם.</p>
+      <button class="modal-btn" type="button" onclick="closeFreeDeliveryModal()">מעולה</button>
+    </div>
+  </div>
+
+  <script>
+    const PHONE_NUMBER = "972523971954";
+    const PRICES = {
+      jachnun: 50,
+      kubaneh: 20,
+      sahug: 10,
+      delivery: 5
+    };
+    const FREE_DELIVERY_THRESHOLD = 150;
+
+    let freeDeliveryModalShown = false;
+
+    function getQty(id){
+      return Math.max(0, parseInt(document.getElementById(id).value || 0, 10));
+    }
+
+    function normalizeQty(id){
+      const el = document.getElementById(id);
+      let v = parseInt(el.value || 0, 10);
+      if (isNaN(v) || v < 0) v = 0;
+      el.value = v;
+    }
+
+    function changeQty(id, delta){
+      const el = document.getElementById(id);
+      let value = parseInt(el.value || 0, 10);
+      if (isNaN(value)) value = 0;
+      value = Math.max(0, value + delta);
+      el.value = value;
+      updateSummary();
+    }
+
+    function toggleAddress(forceShow = null){
+      const show = forceShow !== null ? forceShow : document.getElementById("delivery").checked;
+      document.getElementById("addressFields").classList.toggle("hidden", !show);
+    }
+
+    function syncFreeDeliveryState(eligibleForFreeDelivery){
+      const deliveryCheckbox = document.getElementById("delivery");
+
+      if (eligibleForFreeDelivery){
+        deliveryCheckbox.checked = true;
+        deliveryCheckbox.disabled = true;
+        deliveryCheckbox.title = 'בהזמנה מעל 150 ₪ המשלוח מופעל אוטומטית';
+        toggleAddress(true);
+      } else {
+        deliveryCheckbox.disabled = false;
+        deliveryCheckbox.title = '';
+        toggleAddress();
+      }
+    }
+
+    function getOrderDetails(){
+      const items = [];
+      const jachnun = getQty("jachnun");
+      const kubaneh = getQty("kubaneh");
+      const sahug = getQty("sahug");
+      const delivery = document.getElementById("delivery").checked;
+
+      if (jachnun > 0) items.push({name:"גחנון", qty:jachnun, note:"4 יחידות במארז", total:jachnun * PRICES.jachnun});
+      if (kubaneh > 0) items.push({name:"קובנה", qty:kubaneh, note:"שלישייה", total:kubaneh * PRICES.kubaneh});
+      if (sahug > 0) items.push({name:"סחוג", qty:sahug, note:"ליחידה", total:sahug * PRICES.sahug});
+
+      const subtotal = items.reduce((sum, item) => sum + item.total, 0);
+      const eligibleForFreeDelivery = subtotal >= FREE_DELIVERY_THRESHOLD;
+      const deliveryCost = delivery ? (eligibleForFreeDelivery ? 0 : PRICES.delivery) : 0;
+      let total = subtotal;
+
+      if (delivery){
+        items.push({
+          name:"משלוח",
+          qty:1,
+          note:eligibleForFreeDelivery ? "חינם מעל 150 ₪" : "תוספת שירות",
+          total:deliveryCost
+        });
+        total += deliveryCost;
+      }
+
+      return { items, subtotal, total, delivery, deliveryCost, eligibleForFreeDelivery };
+    }
+
+    function updateDeliveryUi(eligibleForFreeDelivery){
+      const priceText = document.getElementById("deliveryPriceText");
+      const ribbon = document.getElementById("freeDeliveryRibbon");
+      const pill = document.getElementById("freeDeliveryPill");
+
+      if (eligibleForFreeDelivery){
+        priceText.textContent = 'חינם מעל 150 ₪ • משלוח עד הבית';
+        ribbon.classList.add('show');
+        pill.classList.add('show');
+      } else {
+        priceText.textContent = 'תוספת 5 ₪ • מסודר, מהיר ונוח';
+        ribbon.classList.remove('show');
+        pill.classList.remove('show');
+      }
+    }
+
+    function updateSummary(){
+      let orderDetails = getOrderDetails();
+      const box = document.getElementById("summaryItems");
+
+      syncFreeDeliveryState(orderDetails.eligibleForFreeDelivery);
+      orderDetails = getOrderDetails();
+
+      const { items, total, subtotal, eligibleForFreeDelivery } = orderDetails;
+      document.getElementById("totalPrice").textContent = total;
+      document.getElementById("totalBottom").textContent = total;
+
+      updateDeliveryUi(eligibleForFreeDelivery);
+      handleFreeDeliveryCelebration(subtotal >= FREE_DELIVERY_THRESHOLD);
+
+      if (!items.length){
+        box.innerHTML = '<div class="summary-empty">עדיין לא נבחרו פריטים</div>';
+        return;
+      }
+
+      box.innerHTML = items.map(item => `
+        <div class="summary-row">
+          <div class="summary-label">
+            <div class="summary-name">${item.name}${item.name !== "משלוח" ? ` × ${item.qty}` : ""}</div>
+            <div class="summary-sub">${item.note}</div>
+          </div>
+          <strong>${item.total} ₪</strong>
+        </div>
+      `).join("");
+    }
+
+    function handleFreeDeliveryCelebration(isEligibleNow){
+      if (isEligibleNow && !freeDeliveryModalShown){
+        freeDeliveryModalShown = true;
+        showFreeDeliveryModal();
+      }
+      if (!isEligibleNow){
+        freeDeliveryModalShown = false;
+      }
+    }
+
+    function showFreeDeliveryModal(){
+      document.getElementById('freeDeliveryModal').classList.remove('hidden');
+      launchConfetti();
+    }
+
+    function closeFreeDeliveryModal(){
+      document.getElementById('freeDeliveryModal').classList.add('hidden');
+    }
+
+    function launchConfetti(){
+      const layer = document.getElementById('confettiLayer');
+      layer.classList.remove('hidden');
+      layer.innerHTML = '';
+      const colors = ['#f59e0b','#22c55e','#ef4444','#3b82f6','#a855f7','#f97316','#14b8a6','#eab308'];
+      const count = 120;
+
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement('span');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDuration = (2.7 + Math.random() * 1.8) + 's';
+        piece.style.animationDelay = (Math.random() * 0.45) + 's';
+        piece.style.setProperty('--drift', ((Math.random() * 240) - 120) + 'px');
+        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+        if (Math.random() > 0.5) piece.style.borderRadius = '999px';
+        layer.appendChild(piece);
+      }
+
+      setTimeout(() => {
+        layer.innerHTML = '';
+        layer.classList.add('hidden');
+      }, 5200);
+    }
+
+    function sanitizePhone(value){
+      let cleaned = String(value || '').replace(/[^\d]/g, '');
+      if (cleaned.startsWith('972')) {
+        cleaned = '0' + cleaned.slice(3);
+      }
+      if (cleaned.length > 10) cleaned = cleaned.slice(0, 10);
+      return cleaned;
+    }
+
+    function getPhoneValidationMessage(phone){
+      if (!phone) return 'נא למלא מספר פלאפון';
+      if (!/^05\d{8}$/.test(phone)){
+        if (/^05\d{0,7}$/.test(phone)) {
+          const missing = 10 - phone.length;
+          return missing === 1 ? 'חסרה ספרה אחת במספר הפלאפון' : `חסרות ${missing} ספרות במספר הפלאפון`;
+        }
+        if (!phone.startsWith('05')) return 'מספר פלאפון צריך להתחיל ב-05';
+        return 'נא להזין מספר פלאפון תקין';
+      }
+      return '';
+    }
+
+    function setPhoneError(message){
+      const phoneInput = document.getElementById('customerPhone');
+      const errorEl = document.getElementById('phoneError');
+      errorEl.textContent = message;
+      phoneInput.classList.toggle('input-error', !!message);
+    }
+
+    function handlePhoneInput(){
+      const phoneInput = document.getElementById('customerPhone');
+      phoneInput.value = sanitizePhone(phoneInput.value);
+      validatePhoneField(false);
+    }
+
+    function validatePhoneField(showError = true){
+      const phoneInput = document.getElementById('customerPhone');
+      const sanitized = sanitizePhone(phoneInput.value);
+      phoneInput.value = sanitized;
+      const message = getPhoneValidationMessage(sanitized);
+      setPhoneError(showError ? message : (sanitized && message ? message : ''));
+      return !message;
+    }
+
+    function validateOrder(){
+      const name = document.getElementById("customerName").value.trim();
+      const phone = sanitizePhone(document.getElementById("customerPhone").value);
+      document.getElementById("customerPhone").value = phone;
+      const address = document.getElementById("address").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+
+      syncFreeDeliveryState(getOrderDetails().eligibleForFreeDelivery);
+      const { items, total, delivery, subtotal, eligibleForFreeDelivery, deliveryCost } = getOrderDetails();
+
+      if (!name){ alert("נא למלא שם"); return null; }
+      const phoneError = getPhoneValidationMessage(phone);
+      if (phoneError){ setPhoneError(phoneError); alert(phoneError); return null; }
+      setPhoneError("");
+      if (items.filter(i => i.name !== "משלוח").length === 0){ alert("נא לבחור לפחות מוצר אחד"); return null; }
+      if ((delivery || eligibleForFreeDelivery) && !address){
+        toggleAddress(true);
+        document.getElementById("address").focus();
+        alert("בהזמנה עם משלוח חינם חובה למלא כתובת למשלוח");
+        return null;
+      }
+
+      return {
+        id: Date.now(),
+        createdAt: new Date().toLocaleString("he-IL"),
+        name,
+        phone,
+        address,
+        notes,
+        delivery,
+        items,
+        subtotal,
+        eligibleForFreeDelivery,
+        deliveryCost,
+        total
+      };
+    }
+
+    function buildWhatsAppText(order){
+      const lines = [
+        "הזמנה חדשה",
+        "----------------",
+        `שם: ${order.name}`,
+        `טלפון: ${order.phone}`,
+        ""
+      ];
+      lines.push("פריטים:");
+      order.items.forEach(item => {
+        lines.push(`- ${item.name}${item.name !== "משלוח" ? ` x ${item.qty}` : ""} = ${item.total} ₪`);
+      });
+      lines.push("");
+      lines.push(`סוג הזמנה: ${order.delivery ? "משלוח" : "איסוף עצמי"}`);
+      if (order.delivery){
+        lines.push(`כתובת: ${order.address}`);
+        if (order.notes) lines.push(`הערות: ${order.notes}`);
+      }
+      if (order.eligibleForFreeDelivery) lines.push("הטבה: משלוח חינם");
+      lines.push("");
+      lines.push(`סה"כ לתשלום: ${order.total} ₪`);
+      return encodeURIComponent(lines.join("\n"));
+    }
+
+    function getStoredOrders(){
+      try { return JSON.parse(localStorage.getItem("gachnun_orders_v4") || "[]"); }
+      catch(e){ return []; }
+    }
+
+    function saveOrderToStorage(order){
+      const orders = getStoredOrders();
+      orders.unshift(order);
+      localStorage.setItem("gachnun_orders_v4", JSON.stringify(orders));
+    }
+
+    function sendWhatsAppOrder(){
+      const order = validateOrder();
+      if (!order) return;
+      saveOrderToStorage(order);
+      renderOrders();
+      window.open(`https://wa.me/${PHONE_NUMBER}?text=${buildWhatsAppText(order)}`, "_blank");
+    }
+
+    function saveOrder(){
+      const order = validateOrder();
+      if (!order) return;
+      saveOrderToStorage(order);
+      renderOrders();
+      alert("ההזמנה נשמרה");
+    }
+
+    function openWhatsApp(){
+      window.open(`https://wa.me/${PHONE_NUMBER}`, "_blank");
+    }
+
+    function toggleAdmin(){
+  const correctCode = "1611"; // 👉 שנה לקוד שלך
+
+  const userCode = prompt("הכנס קוד גישה:");
+
+  if (userCode === correctCode) {
+    document.getElementById("adminPanel").classList.toggle("hidden");
+  } else if (userCode !== null) {
+    alert("קוד שגוי!");
+  }
+}
+
+    function deleteOrder(id){
+      const orders = getStoredOrders().filter(order => order.id !== id);
+      localStorage.setItem("gachnun_orders_v4", JSON.stringify(orders));
+      renderOrders();
+    }
+
+    function clearOrders(){
+      if (!confirm("למחוק את כל ההזמנות?")) return;
+      localStorage.removeItem("gachnun_orders_v4");
+      renderOrders();
+    }
+
+    function exportOrders(){
+      const orders = getStoredOrders();
+      if (!orders.length){ alert("אין הזמנות לייצוא"); return; }
+
+      const rows = [["תאריך","שם","טלפון","פריטים","משלוח","זכאי למשלוח חינם","כתובת","הערות","סהכ"]];
+      orders.forEach(order => {
+        rows.push([
+          order.createdAt,
+          order.name,
+          order.phone,
+          order.items.map(item => `${item.name}${item.name !== "משלוח" ? " x" + item.qty : ""}`).join(" | "),
+          order.delivery ? "כן" : "לא",
+          order.eligibleForFreeDelivery ? "כן" : "לא",
+          order.address || "",
+          order.notes || "",
+          order.total
+        ]);
+      });
+
+      const csv = "\uFEFF" + rows.map(row =>
+        row.map(value => `"${String(value).replaceAll('"','""')}"`).join(",")
+      ).join("\n");
+
+      const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "orders-gachnun-hadad.csv";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function shareExistingOrder(id){
+      const order = getStoredOrders().find(order => order.id === id);
+      if (!order) return;
+      window.open(`https://wa.me/${PHONE_NUMBER}?text=${buildWhatsAppText(order)}`, "_blank");
+    }
+
+    function renderOrders(){
+      const list = document.getElementById("ordersList");
+      const orders = getStoredOrders();
+
+      if (!orders.length){
+        list.innerHTML = '<div class="empty">עדיין אין הזמנות שמורות</div>';
+        return;
+      }
+
+      list.innerHTML = orders.map(order => `
+        <div class="order-card">
+          <div class="order-top">
+            <div>
+              <div class="order-name">${order.name}</div>
+              <div class="small">${order.phone}</div>
+            </div>
+            <div><span class="badge">${order.createdAt}</span></div>
+          </div>
+
+          <div class="small" style="margin-bottom:8px">
+            ${order.delivery ? "משלוח" : "איסוף עצמי"}${order.address ? ` • ${order.address}` : ""}
+            ${order.eligibleForFreeDelivery ? ' • משלוח חינם' : ''}
+          </div>
+
+          ${order.items.map(item => `
+            <div class="summary-row">
+              <div class="summary-label">
+                <div class="summary-name">${item.name}${item.name !== "משלוח" ? ` × ${item.qty}` : ""}</div>
+                <div class="summary-sub">${item.note}</div>
+              </div>
+              <strong>${item.total} ₪</strong>
+            </div>
+          `).join("")}
+
+          ${order.notes ? `<div class="small" style="margin-top:10px"><strong>הערות:</strong> ${order.notes}</div>` : ""}
+
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <strong>סה"כ: ${order.total} ₪</strong>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="chip-btn" type="button" onclick="shareExistingOrder(${order.id})">שלח שוב</button>
+              <button class="chip-btn" type="button" onclick="deleteOrder(${order.id})">מחק</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    document.getElementById('freeDeliveryModal').addEventListener('click', (event) => {
+      if (event.target.id === 'freeDeliveryModal') closeFreeDeliveryModal();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeFreeDeliveryModal();
+    });
+
+    handlePhoneInput();
+    toggleAddress();
+    updateSummary();
+    renderOrders();
+  </script>
+</body>
+</html>
