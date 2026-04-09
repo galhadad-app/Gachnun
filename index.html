@@ -218,7 +218,9 @@
 
     .qty-box{
       display:flex;
+      direction:ltr;
       align-items:center;
+      justify-content:center;
       gap:7px;
       background:#f9fafb;
       border:1px solid var(--border);
@@ -250,13 +252,25 @@
     .qty-btn:hover{background:#fef3c7}
 
     .qty-input{
-      width:34px;
+      width:40px;
+      min-width:40px;
+      padding:0;
+      margin:0;
       text-align:center;
       border:none;
       background:transparent;
       font-size:18px;
       font-weight:800;
+      line-height:1;
       color:var(--brand);
+      appearance:textfield;
+      -moz-appearance:textfield;
+    }
+
+    .qty-input::-webkit-outer-spin-button,
+    .qty-input::-webkit-inner-spin-button{
+      -webkit-appearance:none;
+      margin:0;
     }
 
     .delivery-box{
@@ -1002,8 +1016,9 @@
         toggleAddress(true);
       } else {
         deliveryCheckbox.disabled = false;
+        deliveryCheckbox.checked = false;
         deliveryCheckbox.title = '';
-        toggleAddress();
+        toggleAddress(false);
       }
     }
 
