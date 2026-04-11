@@ -59,10 +59,10 @@
 
     .logo-float{
       position:relative;
-      top:40px;
       text-align:center;
-      margin-bottom:-58px;
+      margin:0 auto -58px;
       z-index:30;
+      transform:translateY(40px);
     }
 
     .logo-float img{
@@ -648,6 +648,27 @@
     .chip-btn{background:#f3f4f6;color:var(--text)}
     .modal-btn{background:#111827;color:#fff;min-width:140px}
 
+    .payment-buttons{display:flex;gap:10px;flex-wrap:wrap}
+    .payment-btn{
+      flex:1;
+      min-width:120px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      border-radius:16px;
+      padding:14px 16px;
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .12s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .payment-btn.active{
+      background:#fff7ed;
+      border-color:#f59e0b;
+      box-shadow:0 8px 20px rgba(245,158,11,.12);
+      color:#92400e;
+    }
+
     .main-btn:hover,.wa-btn:hover,.save-btn:hover,.chip-btn:hover,.modal-btn:hover{filter:brightness(.98)}
 
     .admin-toggle{margin-top:16px}
@@ -794,38 +815,80 @@
     }
 
     @media (max-width:760px){
+      .app{
+        padding:14px 10px 34px;
+      }
+
       .layout{grid-template-columns:1fr}
+
+      .logo-float{
+        margin:0 auto -34px;
+        transform:translateY(26px);
+      }
+
+      .logo-float img{
+        width:124px;
+        height:124px;
+      }
+
+      .topbar{
+        border-radius:24px;
+        padding:78px 14px 18px;
+        margin-bottom:12px;
+      }
+
       .topbar h1{font-size:24px}
-      .food-thumb{
-  width:96px;
-  height:96px;
-  flex:0 0 96px;
-  object-fit:cover;
-  background:transparent !important;
-  border:none !important;
-  box-shadow:none !important;
-  border-radius:0 !important;
-  padding:0 !important;
-}
 
+      .card{
+        padding:14px;
+        border-radius:20px;
+      }
 
-.menu-item:hover .food-thumb{
-  width:96px;
-  height:96px;
-  flex:0 0 96px;
-  object-fit:cover;
-  background:transparent !important;
-  border:none !important;
-  box-shadow:none !important;
-  border-radius:0 !important;
-  padding:0 !important;
-}
+      .menu-item{
+        display:grid;
+        grid-template-columns:1fr auto;
+        grid-template-areas:
+          "thumb info"
+          "qty qty";
+        align-items:center;
+        gap:10px;
+        padding:12px;
+      }
 
+      .food-thumb,
+      .menu-item:hover .food-thumb{
+        grid-area:thumb;
+        width:82px;
+        height:82px;
+        flex:0 0 82px;
+        justify-self:center;
+        object-fit:cover;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        padding:0 !important;
+      }
+
+      .food-info{
+        grid-area:info;
+        min-width:0;
+      }
+
+      .qty-box{
+        grid-area:qty;
+        width:100%;
+        max-width:132px;
+        margin:4px auto 0;
+      }
+
+      .food-top{
+        gap:8px;
+      }
 
       .food-title{font-size:17px}
       .qty-btn{width:32px;height:32px}
       .qty-input{width:28px}
-      .logo-float img{width:124px;height:124px}
       .modal-card h3{font-size:26px}
       .secondary-actions{grid-template-columns:1fr}
     }
@@ -856,15 +919,15 @@
                 <div class="food-title">גחנון</div>
                 <div class="price-badge">50 ₪</div>
               </div>
-              <div class="food-sub">4 יחידות במארז. </div>
+              <div class="food-sub">4 יחידות במארז </div>
               <div class="food-tags">
                 <span class="food-tag">🔥 הכי נמכר</span>
                          </div>
             </div>
             <div class="qty-box">
-              <button class="qty-btn" type="button" onclick="changeQty('jachnun', -1)">−</button>
-              <input class="qty-input" id="jachnun" type="number" min="0" value="0" onchange="normalizeQty('jachnun'); updateSummary();" />
               <button class="qty-btn" type="button" onclick="changeQty('jachnun', 1)">+</button>
+              <input class="qty-input" id="jachnun" type="number" min="0" value="0" onchange="normalizeQty('jachnun'); updateSummary();" />
+              <button class="qty-btn" type="button" onclick="changeQty('jachnun', -1)">−</button>
             </div>
           </div>
 
@@ -875,15 +938,15 @@
                 <div class="food-title">קובנה</div>
                 <div class="price-badge">20 ₪</div>
               </div>
-              <div class="food-sub">3 יחידות במארז, אווריריות וחמאתיות.</div>
+              <div class="food-sub">3 יחידות במארז, אווריריות וחמאתיות בטעם ביתי.</div>
               <div class="food-tags">
                 <span class="food-tag recommended">⭐ מומלץ לשבת</span>
               </div>
             </div>
             <div class="qty-box">
-              <button class="qty-btn" type="button" onclick="changeQty('kubaneh', -1)">−</button>
-              <input class="qty-input" id="kubaneh" type="number" min="0" value="0" onchange="normalizeQty('kubaneh'); updateSummary();" />
               <button class="qty-btn" type="button" onclick="changeQty('kubaneh', 1)">+</button>
+              <input class="qty-input" id="kubaneh" type="number" min="0" value="0" onchange="normalizeQty('kubaneh'); updateSummary();" />
+              <button class="qty-btn" type="button" onclick="changeQty('kubaneh', -1)">−</button>
             </div>
           </div>
 
@@ -900,9 +963,9 @@
               </div>
             </div>
             <div class="qty-box">
-              <button class="qty-btn" type="button" onclick="changeQty('sahug', -1)">−</button>
-              <input class="qty-input" id="sahug" type="number" min="0" value="0" onchange="normalizeQty('sahug'); updateSummary();" />
               <button class="qty-btn" type="button" onclick="changeQty('sahug', 1)">+</button>
+              <input class="qty-input" id="sahug" type="number" min="0" value="0" onchange="normalizeQty('sahug'); updateSummary();" />
+              <button class="qty-btn" type="button" onclick="changeQty('sahug', -1)">−</button>
             </div>
           </div>
         </div>
@@ -964,7 +1027,30 @@
                  <div id="phoneError" class="field-error"></div>
         </div>
 
-        <div class="summary-box" id="summaryItems">
+        
+<div class="field">
+  <label>אמצעי תשלום</label>
+  <input id="paymentMethod" type="hidden" value="cash">
+  <div class="payment-buttons">
+    <button id="paymentCashBtn" class="payment-btn active" type="button" onclick="setPayment('cash')">💵 מזומן</button>
+    <button id="paymentBitBtn" class="payment-btn" type="button" onclick="setPayment('bit')">📱 ביט</button>
+  </div>
+  <div class="field-hint">בהזמנה בביט — יש לשלם מראש לאישור ההזמנה</div>
+<div id="bitNotice" style="display:none;background:#d1fae5;padding:12px;border-radius:12px;margin-top:10px;font-weight:bold">
+  <div>לתשלום בביט: 052-3971954</div>
+  <div style="margin-top:6px">אחרי שליחת ההזמנה יופיע מספר הזמנה. יש לרשום אותו בהערת התשלום בביט.</div>
+  <div style="margin-top:6px">לאחר התשלום נא לשלוח צילום מסך לאישור ההזמנה.</div>
+  <button type="button" onclick="openBitApp()" style="margin-top:10px;background:#00c2ff;color:#003049;border:none;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:800;cursor:pointer">
+    שלם עכשיו בביט
+  </button>
+  <div style="font-size:12px;font-weight:normal;margin-top:8px;color:#065f46">
+    הכפתור עובד בעיקר בטלפון שבו מותקנת אפליקציית ביט
+  </div>
+</div>
+
+</div>
+
+<div class="summary-box" id="summaryItems">
           <div class="summary-empty">עדיין לא נבחרו פריטים</div>
         </div>
 
@@ -1256,6 +1342,14 @@
       return !message;
     }
 
+    function getNextOrderNumber(){
+      const key = "gachnun_order_counter_v1";
+      let counter = Number(localStorage.getItem(key) || "1000");
+      counter += 1;
+      localStorage.setItem(key, String(counter));
+      return `#${counter}`;
+    }
+
     function validateOrder(){
       const name = document.getElementById("customerName").value.trim();
       const phone = sanitizePhone(document.getElementById("customerPhone").value);
@@ -1280,11 +1374,13 @@
 
       return {
         id: Date.now(),
+        orderNumber: getNextOrderNumber(),
         createdAt: new Date().toLocaleString("he-IL"),
         name,
         phone,
         address,
         notes,
+        payment: getPayment(),
         delivery,
         items,
         subtotal,
@@ -1298,6 +1394,7 @@
       const lines = [
         "הזמנה חדשה",
         "----------------",
+        `מספר הזמנה: ${order.orderNumber || "-"}`,
         `שם: ${order.name}`,
         `טלפון: ${order.phone}`,
         ""
@@ -1312,21 +1409,49 @@
         lines.push(`כתובת: ${order.address}`);
         if (order.notes) lines.push(`הערות: ${order.notes}`);
       }
+      if (order.payment) lines.push(`אמצעי תשלום: ${order.payment === 'bit' ? 'ביט' : 'מזומן'}`);
+      if (order.payment === 'bit') {
+        lines.push(`נא לרשום בהערת התשלום בביט: ${order.orderNumber || "-"}`);
+        lines.push("לאחר התשלום נא לשלוח צילום מסך לאישור ההזמנה");
+      }
       if (order.eligibleForFreeDelivery) lines.push("הטבה: משלוח חינם");
       lines.push("");
       lines.push(`סה"כ לתשלום: ${order.total} ₪`);
       return encodeURIComponent(lines.join("\n"));
     }
 
-    function getStoredOrders(){
-      try { return JSON.parse(localStorage.getItem("gachnun_orders_v4") || "[]"); }
+    
+function getPayment(){
+  const el = document.getElementById('paymentMethod');
+  return el ? el.value : 'cash';
+}
+
+function setPayment(method){
+  const paymentInput = document.getElementById('paymentMethod');
+  const cashBtn = document.getElementById('paymentCashBtn');
+  const bitBtn = document.getElementById('paymentBitBtn');
+  const bitNotice = document.getElementById('bitNotice');
+  if (paymentInput) paymentInput.value = method;
+  if (cashBtn) cashBtn.classList.toggle('active', method === 'cash');
+  if (bitBtn) bitBtn.classList.toggle('active', method === 'bit');
+  if (bitNotice) bitNotice.style.display = method === 'bit' ? 'block' : 'none';
+}
+
+
+function openBitApp(){
+  const phone = "0523971954";
+  window.location.href = `bit://pay?phone=${phone}`;
+}
+
+function getStoredOrders(){
+      try { return JSON.parse(localStorage.getItem("gachnun_orders_v5") || "[]"); }
       catch(e){ return []; }
     }
 
     function saveOrderToStorage(order){
       const orders = getStoredOrders();
       orders.unshift(order);
-      localStorage.setItem("gachnun_orders_v4", JSON.stringify(orders));
+      localStorage.setItem("gachnun_orders_v5", JSON.stringify(orders));
     }
 
     function sendWhatsAppOrder(){
@@ -1334,6 +1459,10 @@
       if (!order) return;
       saveOrderToStorage(order);
       renderOrders();
+
+      if (order.payment === 'bit') {
+        alert(`מספר ההזמנה שלך הוא ${order.orderNumber}. יש לרשום אותו בהערת התשלום בביט.`);
+      }
       window.open(`https://wa.me/${PHONE_NUMBER}?text=${buildWhatsAppText(order)}`, "_blank");
     }
 
@@ -1342,7 +1471,8 @@
       if (!order) return;
       saveOrderToStorage(order);
       renderOrders();
-      alert("ההזמנה נשמרה");
+
+      alert(`ההזמנה נשמרה בהצלחה. מספר הזמנה: ${order.orderNumber}`);
     }
 
     function openWhatsApp(){
@@ -1363,26 +1493,30 @@
 
     function deleteOrder(id){
       const orders = getStoredOrders().filter(order => order.id !== id);
-      localStorage.setItem("gachnun_orders_v4", JSON.stringify(orders));
+      localStorage.setItem("gachnun_orders_v5", JSON.stringify(orders));
       renderOrders();
+
     }
 
     function clearOrders(){
       if (!confirm("למחוק את כל ההזמנות?")) return;
-      localStorage.removeItem("gachnun_orders_v4");
+      localStorage.removeItem("gachnun_orders_v5");
       renderOrders();
+
     }
 
     function exportOrders(){
       const orders = getStoredOrders();
       if (!orders.length){ alert("אין הזמנות לייצוא"); return; }
 
-      const rows = [["תאריך","שם","טלפון","פריטים","משלוח","זכאי למשלוח חינם","כתובת","הערות","סהכ"]];
+      const rows = [["מספר הזמנה","תאריך","שם","טלפון","אמצעי תשלום","פריטים","משלוח","זכאי למשלוח חינם","כתובת","הערות","סהכ"]];
       orders.forEach(order => {
         rows.push([
+          order.orderNumber || "",
           order.createdAt,
           order.name,
           order.phone,
+          order.payment === 'bit' ? 'ביט' : 'מזומן',
           order.items.map(item => `${item.name}${item.name !== "משלוח" ? " x" + item.qty : ""}`).join(" | "),
           order.delivery ? "כן" : "לא",
           order.eligibleForFreeDelivery ? "כן" : "לא",
@@ -1425,7 +1559,9 @@
           <div class="order-top">
             <div>
               <div class="order-name">${order.name}</div>
+              <div class="small">מספר הזמנה: ${order.orderNumber || "-"}</div>
               <div class="small">${order.phone}</div>
+              <div class="small">אמצעי תשלום: ${order.payment === 'bit' ? 'ביט' : 'מזומן'}</div>
             </div>
             <div><span class="badge">${order.createdAt}</span></div>
           </div>
@@ -1470,6 +1606,8 @@
     toggleAddress();
     updateSummary();
     renderOrders();
+    setPayment(getPayment());
+
   </script>
 </body>
 </html>
