@@ -214,15 +214,22 @@
     }
 
     .price-badge{
-      background:#fff7ed;
-      color:#b45309;
-      border:1px solid #fdba74;
-      font-size:13px;
-      padding:6px 10px;
+      background:linear-gradient(135deg,#dcfce7,#bbf7d0);
+      color:#14532d;
+      border:1px solid #86efac;
+      font-size:17px;
+      padding:7px 13px;
       border-radius:999px;
       white-space:nowrap;
-      font-weight:800;
-      box-shadow:0 4px 12px rgba(245,158,11,.10);
+      font-weight:900;
+      letter-spacing:.4px;
+      box-shadow:0 6px 16px rgba(22,163,74,.18);
+      transform-origin:center;
+      will-change:transform;
+    }
+
+    .price-badge.price-pop{
+      animation:pricePop .34s ease;
     }
 
     .food-sub{
@@ -970,6 +977,12 @@
       transform:scale(.95);
     }
 
+    @keyframes pricePop{
+      0%{transform:scale(1);}
+      35%{transform:scale(1.12) translateY(-1px);}
+      100%{transform:scale(1);}
+    }
+
     @media (max-width:760px){
       .app{
         padding:14px 10px 34px;
@@ -1054,7 +1067,7 @@
 
       .food-title{font-size:17px}
       .food-sub{font-size:13px; line-height:1.55;}
-      .price-badge{font-size:12px; padding:5px 9px;}
+      .price-badge{font-size:15px; padding:6px 11px;}
       .qty-btn{width:32px;height:32px}
       .qty-input{width:28px}
       .delivery-box{
@@ -1111,7 +1124,7 @@
             <div class="food-info">
               <div class="food-top">
                 <div class="food-title">גחנון</div>
-                <div class="price-badge">50 ₪</div>
+                <div class="price-badge" data-price-for="jachnun">50 ₪</div>
               </div>
               <div class="food-sub">4 יחידות במארז </div>
               <div class="food-tags">
@@ -1120,7 +1133,7 @@
             </div>
             <div class="qty-box">
               <button class="qty-btn" type="button" onclick="changeQty('jachnun', 1)">+</button>
-              <input class="qty-input" id="jachnun" type="number" min="0" value="0" onchange="normalizeQty('jachnun'); updateSummary();" />
+              <input class="qty-input" id="jachnun" data-product="jachnun" type="number" min="0" value="0" onchange="normalizeQty('jachnun'); animatePriceBadge('jachnun'); updateSummary();" />
               <button class="qty-btn" type="button" onclick="changeQty('jachnun', -1)">−</button>
             </div>
           </div>
@@ -1130,7 +1143,7 @@
             <div class="food-info">
               <div class="food-top">
                 <div class="food-title">קובנה</div>
-                <div class="price-badge">20 ₪</div>
+                <div class="price-badge" data-price-for="kubaneh">20 ₪</div>
               </div>
               <div class="food-sub">3 יחידות במארז, אווריריות וחמאתיות בטעם ביתי.</div>
               <div class="food-tags">
@@ -1139,7 +1152,7 @@
             </div>
             <div class="qty-box">
               <button class="qty-btn" type="button" onclick="changeQty('kubaneh', 1)">+</button>
-              <input class="qty-input" id="kubaneh" type="number" min="0" value="0" onchange="normalizeQty('kubaneh'); updateSummary();" />
+              <input class="qty-input" id="kubaneh" data-product="kubaneh" type="number" min="0" value="0" onchange="normalizeQty('kubaneh'); animatePriceBadge('kubaneh'); updateSummary();" />
               <button class="qty-btn" type="button" onclick="changeQty('kubaneh', -1)">−</button>
             </div>
           </div>
@@ -1149,7 +1162,7 @@
             <div class="food-info">
               <div class="food-top">
                 <div class="food-title">סחוג</div>
-                <div class="price-badge">10 ₪</div>
+                <div class="price-badge" data-price-for="sahug">10 ₪</div>
               </div>
               <div class="food-sub">חריפות מדויקת וטעם עשיר שמקפיץ כל ביס לרמה אחרת.</div>
               <div class="food-tags">
@@ -1158,7 +1171,7 @@
             </div>
             <div class="qty-box">
               <button class="qty-btn" type="button" onclick="changeQty('sahug', 1)">+</button>
-              <input class="qty-input" id="sahug" type="number" min="0" value="0" onchange="normalizeQty('sahug'); updateSummary();" />
+              <input class="qty-input" id="sahug" data-product="sahug" type="number" min="0" value="0" onchange="normalizeQty('sahug'); animatePriceBadge('sahug'); updateSummary();" />
               <button class="qty-btn" type="button" onclick="changeQty('sahug', -1)">−</button>
             </div>
           </div>
@@ -1442,12 +1455,21 @@
       el.value = v;
     }
 
+    function animatePriceBadge(id){
+      const badge = document.querySelector(`[data-price-for="${id}"]`);
+      if (!badge) return;
+      badge.classList.remove('price-pop');
+      void badge.offsetWidth;
+      badge.classList.add('price-pop');
+    }
+
     function changeQty(id, delta){
       const el = document.getElementById(id);
       let value = parseInt(el.value || 0, 10);
       if (isNaN(value)) value = 0;
       value = Math.max(0, value + delta);
       el.value = value;
+      animatePriceBadge(id);
       updateSummary();
     }
 
