@@ -983,6 +983,101 @@
       100%{transform:scale(1);}
     }
 
+
+    /* LED board under logo */
+    .led-wrap{
+      display:flex;
+      justify-content:center;
+      width:100%;
+      margin-top:8px;
+    }
+
+    .led-board{
+      background:linear-gradient(145deg,#111,#050505);
+      border:4px solid #0a0a0a;
+      border-radius:18px;
+      width:min(100%, 560px);
+      min-height:78px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      box-shadow:
+        0 15px 30px rgba(0,0,0,0.35),
+        inset 0 0 20px rgba(255,255,255,0.03);
+      padding:0 18px;
+    }
+
+    .led-board::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle, rgba(102,208,255,0.15) 1px, transparent 1.6px);
+      background-size:8px 8px;
+      opacity:.2;
+      pointer-events:none;
+    }
+
+    .led-board::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), transparent 30%, transparent 70%, rgba(255,255,255,0.05));
+      pointer-events:none;
+    }
+
+    .led-board .status{
+      position:absolute;
+      left:12px;
+      top:12px;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#00ff88;
+      box-shadow:0 0 8px #00ff88;
+      z-index:2;
+    }
+
+    .led-board .text{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-family:Arial,sans-serif;
+      font-size:22px;
+      font-weight:800;
+      color:#7bddff;
+      text-shadow:
+        0 0 3px rgba(123,221,255,.9),
+        0 0 10px rgba(123,221,255,.5);
+      opacity:0;
+      padding:0 34px;
+      z-index:1;
+      animation:fadeSwitch 9s infinite, flicker 3s infinite alternate;
+      white-space:nowrap;
+    }
+
+    .led-board .text:nth-child(2){animation-delay:0s;}
+    .led-board .text:nth-child(3){animation-delay:3s;}
+    .led-board .text:nth-child(4){animation-delay:6s;}
+
+    @keyframes fadeSwitch{
+      0%{opacity:0; transform:translateY(10px);}
+      10%{opacity:1; transform:translateY(0);}
+      30%{opacity:1;}
+      40%{opacity:0; transform:translateY(-10px);}
+      100%{opacity:0;}
+    }
+
+    @keyframes flicker{
+      0%{filter:brightness(.95);}
+      50%{filter:brightness(1.05);}
+      100%{filter:brightness(1);}
+    }
+
     @media (max-width:760px){
       .app{
         padding:14px 10px 34px;
@@ -1009,6 +1104,17 @@
         border-radius:24px;
         padding:130px 14px 18px;
         margin-bottom:12px;
+      }
+
+
+      .led-board{
+        width:min(100%, 100%);
+        min-height:68px;
+        border-radius:16px;
+      }
+      .led-board .text{
+        font-size:16px;
+        padding:0 26px;
       }
 
       .topbar h1{font-size:24px}
@@ -1140,9 +1246,13 @@
     </div>
 
     <section class="topbar">
-      <div>
-        <div class="deadline">הזמנות עד יום שלישי בשעה 22:00</div>
-        <div class="deadline">כשר למהדרין באישור הרב מחמוד מקלנסוואה</div>
+      <div class="led-wrap">
+        <div class="led-board">
+          <div class="status"></div>
+          <div class="text">הגחנון של חדד</div>
+          <div class="text">הזמנות עד יום שלישי בשעה 22:00</div>
+          <div class="text">כשר למהדרין באישור הרב מחמוד מקלנסוואה</div>
+        </div>
       </div>
     </section>
 
