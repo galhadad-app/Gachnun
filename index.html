@@ -2173,5 +2173,28 @@ function getStoredOrders(){
     setPayment(getPayment());
 
   </script>
+
+<audio id="bgMusic" src="music.mp3" preload="auto"></audio>
+
+<script>
+let musicStarted = false;
+
+function startMusicOnce(){
+  if(musicStarted) return;
+  const audio = document.getElementById('bgMusic');
+  if(!audio) return;
+
+  audio.volume = 0.5;
+  audio.play().then(() => {
+    musicStarted = true;
+  }).catch(() => {});
+}
+
+// triggers on first interaction
+window.addEventListener('scroll', startMusicOnce, { once: true });
+window.addEventListener('touchstart', startMusicOnce, { once: true });
+window.addEventListener('click', startMusicOnce, { once: true });
+</script>
+
 </body>
 </html>
