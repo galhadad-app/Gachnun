@@ -720,9 +720,9 @@
 
     .actions{display:grid;gap:10px;margin-top:14px}
 
-    .secondary-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .secondary-actions{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:10px}
 
-    .main-btn,.wa-btn,.save-btn,.chip-btn,.modal-btn{
+    .main-btn,.wa-btn,.save-btn,.sms-btn,.chip-btn,.modal-btn{
       border:none;
       cursor:pointer;
       border-radius:16px;
@@ -740,14 +740,32 @@
       font-size:18px;
     }
     .main-btn .btn-sub{display:block;font-size:12px;font-weight:700;opacity:.9;margin-top:4px}
-    .save-btn,.wa-btn{
-      background:#f3f4f6;
-      color:var(--text);
+    .save-btn,.wa-btn,.sms-btn{
       font-size:14px;
       padding:13px 14px;
       box-shadow:none;
       border:1px solid var(--border);
     }
+
+    .save-btn,
+    .wa-btn{
+      background:#f3f4f6;
+      color:var(--text);
+    }
+
+    .sms-btn{
+      background:linear-gradient(135deg,#fffaf0,#fff7ed);
+      color:#9a3412;
+      border:1px solid #fed7aa;
+      box-shadow:0 8px 18px rgba(245,158,11,.10);
+    }
+
+    .sms-btn:hover{
+      background:linear-gradient(135deg,#fff7e6,#ffedd5);
+      border-color:#fdba74;
+      box-shadow:0 10px 22px rgba(245,158,11,.14);
+    }
+
     .chip-btn{background:#f3f4f6;color:var(--text)}
     .modal-btn{background:#111827;color:#fff;min-width:140px}
 
@@ -1433,6 +1451,7 @@
           <button class="main-btn" type="button" onclick="sendWhatsAppOrder()">בצע הזמנה בוואטסאפ<span class="btn-sub">פשוט וקל!</span></button>
           <div class="secondary-actions">
             <button class="save-btn" type="button" onclick="saveOrder()">שמור הזמנה במערכת</button>
+            <button class="sms-btn" type="button" onclick="sendSmsOrder()">הזמנה ב-SMS</button>
             <button class="wa-btn" type="button" onclick="openWhatsApp()">מעבר לוואטסאפ העסק</button>
           </div>
         </div>
@@ -2021,6 +2040,52 @@ function getStoredOrders(){
       renderOrders();
 
       showOrderSuccessModal(order, 'whatsapp', whatsappUrl);
+    }
+
+    function sendSmsOrder(){
+      const order = validateOrder();
+      if (!order) return;
+
+      saveOrderToStorage(order);
+      renderOrders();
+
+      const smsNumber = "0523971954";
+      const smsBody = buildSmsText(order);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const separator = isIOS ? '&' : '?';
+
+      window.location.href = `sms:${smsNumber}${separator}body=${smsBody}`;
+    }
+
+    function buildSmsText(order){
+      const lines = [
+        "הזמנה חדשה",
+        "----------------",
+        `מספר הזמנה: ${order.orderNumber || "-"}`,
+        `שם: ${order.name}`,
+        `טלפון: ${order.phone}`,
+        "",
+        "פריטים:"
+      ];
+
+      order.items.forEach(item => {
+        lines.push(`- ${item.name}${item.name !== "משלוח" ? ` x ${item.qty}` : ""} = ${item.total} ₪`);
+      });
+
+      lines.push("");
+      lines.push(`סוג הזמנה: ${order.delivery ? "משלוח" : "איסוף עצמי"}`);
+
+      if (order.delivery){
+        lines.push(`כתובת: ${order.address}`);
+        if (order.notes) lines.push(`הערות: ${order.notes}`);
+      }
+
+      if (order.payment) lines.push(`אמצעי תשלום: ${order.payment === 'bit' ? 'ביט' : 'מזומן'}`);
+      if (order.eligibleForFreeDelivery) lines.push("הטבה: משלוח חינם");
+      lines.push("");
+      lines.push(`סה"כ לתשלום: ${order.total} ₪`);
+
+      return encodeURIComponent(lines.join("\n"));
     }
 
     function saveOrder(){
