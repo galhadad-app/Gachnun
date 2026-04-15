@@ -1453,6 +1453,38 @@
     flex:0 0 95px !important;
   }
 }
+
+
+    .delivery-image-btn.press-buzz{
+      animation:deliveryBuzz .22s linear;
+    }
+
+    .delivery-image-btn.active .delivery-bike-wrap{
+      animation:bikeRotateInPlace 1.8s linear infinite;
+      transform-origin:center center;
+    }
+
+    @keyframes deliveryBuzz{
+      0%{transform:translateX(0)}
+      20%{transform:translateX(-2px)}
+      40%{transform:translateX(2px)}
+      60%{transform:translateX(-2px)}
+      80%{transform:translateX(2px)}
+      100%{transform:translateX(0)}
+    }
+
+    @keyframes bikeRotateInPlace{
+      0%{transform:rotate(0deg)}
+      12%{transform:rotate(8deg)}
+      25%{transform:rotate(0deg)}
+      37%{transform:rotate(-8deg)}
+      50%{transform:rotate(0deg)}
+      62%{transform:rotate(8deg)}
+      75%{transform:rotate(0deg)}
+      87%{transform:rotate(-8deg)}
+      100%{transform:rotate(0deg)}
+    }
+
 </style>
 </head>
 <body>
@@ -1839,11 +1871,25 @@
     }
 
 
+    function triggerDeliveryButtonFeedback(){
+      const btn = document.getElementById("deliveryImageBtn");
+      if (!btn) return;
+      btn.classList.remove("press-buzz");
+      void btn.offsetWidth;
+      btn.classList.add("press-buzz");
+      setTimeout(() => btn.classList.remove("press-buzz"), 240);
+
+      if (navigator.vibrate) {
+        navigator.vibrate(35);
+      }
+    }
+
     function syncDeliveryButtonUi(){
       const checkbox = document.getElementById("delivery");
       const btn = document.getElementById("deliveryImageBtn");
       const status = document.getElementById("deliveryButtonStatus");
-      if (!checkbox || !btn || !status) return;
+      const label = btn ? btn.querySelector(".delivery-btn-label") : null;
+      if (!checkbox || !btn || !status || !label) return;
 
       const isOn = checkbox.checked;
       btn.classList.toggle("active", isOn);
@@ -1851,40 +1897,32 @@
 
       if (checkbox.disabled && isOn){
         status.textContent = "משלוח חינם";
+        label.textContent = "משלוח כלול";
+        label.classList.remove("on");
+        label.classList.add("off");
+      } else if (isOn) {
+        status.textContent = "משלוח מופעל";
+        label.textContent = "לחץ לביטול משלוח";
+        label.classList.remove("off");
+        label.classList.add("on");
       } else {
-        status.textContent = isOn ? "משלוח מופעל" : "משלוח כבוי";
+        status.textContent = "משלוח כבוי";
+        label.textContent = "לחץ למשלוח";
+        label.classList.remove("on");
+        label.classList.add("off");
       }
     }
 
-    
-function toggleDeliveryImageButton() {
-  const checkbox = document.getElementById("delivery");
-  const btn = document.getElementById("deliveryImageBtn");
-  const status = btn.querySelector(".delivery-btn-status");
-  const label = btn.querySelector(".delivery-btn-label");
+    function toggleDeliveryImageButton() {
+      const checkbox = document.getElementById("delivery");
+      if (!checkbox || checkbox.disabled) return;
 
-  checkbox.checked = !checkbox.checked;
-
-  if (checkbox.checked) {
-    btn.classList.add("active");
-    btn.setAttribute("aria-pressed", "true");
-    status.innerText = "משלוח מופעל";
-    label.innerText = "לחץ לביטול משלוח";
-    label.classList.remove("off");
-    label.classList.add("on");
-  } else {
-    btn.classList.remove("active");
-    btn.setAttribute("aria-pressed", "false");
-    status.innerText = "משלוח כבוי";
-    label.innerText = "לחץ למשלוח";
-    label.classList.remove("on");
-    label.classList.add("off");
-  }
-
-  toggleAddress();
-  updateSummary();
-}
-
+      checkbox.checked = !checkbox.checked;
+      triggerDeliveryButtonFeedback();
+      toggleAddress();
+      syncDeliveryButtonUi();
+      updateSummary();
+    }
 
     function toggleAddress(forceShow = null){
       const show = forceShow !== null ? forceShow : document.getElementById("delivery").checked;
