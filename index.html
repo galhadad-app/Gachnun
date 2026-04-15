@@ -14,8 +14,7 @@
   color: white;
   overflow: hidden;
   
-  background: linear-gradient(135deg, #0f172a, #1e3a5f, #0f172a);ש
-
+  background: linear-gradient(135deg, #0f172a, #1e3a5f, #0f172a);
   background-size: 300% 300%;
   animation: gradientMove 8s ease infinite;
 }
@@ -524,7 +523,7 @@
 
     .delivery-bike-img{
       position:relative;
-      width:160px;
+      width:132px;
       height:auto;
       display:block;
       filter:drop-shadow(0 14px 20px rgba(0,0,0,.20));
@@ -1338,10 +1337,12 @@
       .delivery-box{
         gap:10px;
         padding:14px;
+        align-items:flex-start;
       }
       .delivery-main{
         gap:10px;
         min-width:0;
+        flex:1;
       }
       .delivery-icon{
         width:42px;
@@ -1352,21 +1353,26 @@
       }
       .delivery-meta{
         gap:6px;
+        flex-wrap:nowrap;
       }
       .delivery-pill{
         font-size:11px;
         padding:5px 8px;
         line-height:1.3;
-        max-width:96px;
+        max-width:none;
         text-align:center;
-        white-space:normal;
+        white-space:nowrap;
       }
 
+      .delivery-toggle-visual{
+        margin-right:auto;
+        align-items:flex-start;
+      }
       .delivery-image-btn{
-        min-width:120px;
+        min-width:90px;
       }
       .delivery-bike-img{
-        width:160px;
+        width:90px;
       }
       .delivery-btn-label{
         font-size:13px;
