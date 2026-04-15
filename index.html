@@ -432,9 +432,9 @@
 
     .delivery-scooter{
       --scooter-glow: rgba(250,204,21,.95);
-      width:180px;
-      height:160px;
-      margin-top:40px;
+      width:140px;
+      height:100px;
+      margin-top:10px;
       --scooter-ring: rgba(250,204,21,.24);
       appearance:none;
       -webkit-appearance:none;
@@ -1375,8 +1375,8 @@
       }
 
       .delivery-scooter{
-        width:180px;
-        height:160px;
+        width:112px;
+        height:82px;
       }
       .delivery-scooter .speed-lines,
       .delivery-scooter .speed-lines::before,
@@ -1417,6 +1417,29 @@
     flex:0 0 95px !important;
   }
 }
+
+.delivery-scooter{
+  animation: scooterHint 2.2s ease-in-out infinite;
+}
+
+@keyframes scooterHint{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+}
+
+.delivery-label{
+  font-size:14px;
+  font-weight:900;
+  color:#f59e0b;
+  text-align:center;
+  animation: blinkHint 1.6s infinite;
+}
+
+@keyframes blinkHint{
+  0%,100%{ opacity:1; }
+  50%{ opacity:.5; }
+}
+
 </style>
 </head>
 <body>
@@ -1454,7 +1477,7 @@
                          </div>
             </div>
             <div class="qty-box">
-              <button class="qty-btn" type="button" onclick="changeQty('jachnun', 1)">+</button><div style='text-align:center;font-weight:800;font-size:13px;margin-top:6px'>לחץ למשלוח</div>
+              <button class="qty-btn" type="button" onclick="changeQty('jachnun', 1)">+</button><div style='text-align:center;font-weight:800;font-size:13px;margin-top:6px'>לחץ להפעלת משלוח 🚚</div>
               <input class="qty-input" id="jachnun" data-product="jachnun" type="number" min="0" value="0" onchange="normalizeQty('jachnun'); animatePriceBadge('jachnun'); updateSummary();" />
               <button class="qty-btn" type="button" onclick="changeQty('jachnun', -1)">−</button>
             </div>
@@ -1518,7 +1541,7 @@
               <span class="speed-lines" aria-hidden="true"></span>
               <img class="scooter-img" src="delivery-scooter.png" alt="משלוח">
             </button>
-            <div class="delivery-label">לחץ למשלוח</div>
+            <div class="delivery-label">לחץ להפעלת משלוח 🚚</div>
           </div>
         </div>
 
