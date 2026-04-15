@@ -871,6 +871,7 @@
       font-size:18px;
     }
     .main-btn .btn-sub{display:block;font-size:12px;font-weight:700;opacity:.9;margin-top:4px}
+    .main-btn .countdown-digits{display:inline-block;direction:ltr;font-variant-numeric:tabular-nums;letter-spacing:1.2px;font-weight:900}
     .save-btn,.wa-btn,.sms-btn{
       font-size:14px;
       padding:13px 14px;
@@ -1737,6 +1738,18 @@
     </div>
   </div>
 
+  <div id="orderingClosedModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="orderingClosedTitle">
+    <div class="modal-card">
+      <div class="modal-icon">⏰</div>
+      <h3 id="orderingClosedTitle">ההזמנות סגורות כרגע</h3>
+      <p id="orderingClosedSubtitle">כרגע לא ניתן לבצע הזמנה.</p>
+      <div class="success-next-step" id="orderingClosedNextOpen"></div>
+      <div class="success-actions">
+        <button class="modal-btn" type="button" onclick="closeOrderingClosedModal()">אישור</button>
+      </div>
+    </div>
+  </div>
+
 
   <div id="orderSuccessModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="orderSuccessTitle">
     <div class="modal-card">
@@ -1810,16 +1823,63 @@
       });
     }
 
-    function refreshOrderingAvailability(){
-      const { isClosed, nextOpen } = getOrderingAvailability();
-      const statusEl = document.getElementById('orderingStatus');
+    function getTimeUntilOpenText(nextOpen, now = new Date()){
+      const diffMs = Math.max(0, nextOpen.getTime() - now.getTime());
+      const totalMinutes = Math.ceil(diffMs / 60000);
+      const days = Math.floor(totalMinutes / (60 * 24));
+      const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+      const minutes = totalMinutes % 60;
+      const parts = [];
+      if (days) parts.push(`${days} ${days === 1 ? 'יום' : 'ימים'}`);
+      if (hours) parts.push(`${hours} ${hours === 1 ? 'שעה' : 'שעות'}`);
+      if (minutes && days === 0) parts.push(`${minutes} ${minutes === 1 ? 'דקה' : 'דקות'}`);
+      return parts.length ? parts.join(' ו') : 'פחות מדקה';
+    }
+    function formatCountdown(nextOpen, now = new Date()){
+      const diffMs = Math.max(0, nextOpen.getTime() - now.getTime());
+      const totalSeconds = Math.floor(diffMs / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      const hh = String(hours).padStart(2, '0');
+      const mm = String(minutes).padStart(2, '0');
+      const ss = String(seconds).padStart(2, '0');
+      return `${hh}:${mm}:${ss}`;
+    }
+
+
+    function updateClosedButtonsState(isClosed, nextOpen){
       const whatsappBtn = document.getElementById('orderWhatsAppBtn');
+      const whatsappSub = whatsappBtn ? whatsappBtn.querySelector('.btn-sub') : null;
       const smsBtn = document.getElementById('orderSmsBtn');
       const saveBtn = document.getElementById('orderSaveBtn');
 
-      [whatsappBtn, smsBtn, saveBtn].forEach(btn => {
-        if (btn) btn.disabled = isClosed;
+      if (whatsappBtn){
+        whatsappBtn.disabled = isClosed;
+        whatsappBtn.dataset.openLabel = whatsappBtn.dataset.openLabel || 'בצע הזמנה בוואטסאפ';
+        whatsappBtn.textContent = isClosed ? 'סגור להזמנות כרגע' : whatsappBtn.dataset.openLabel;
+        if (whatsappSub){
+          if (isClosed){
+            whatsappSub.innerHTML = `נפתח שוב בעוד: <span class="countdown-digits">${formatCountdown(nextOpen)}</span>`;
+          } else {
+            whatsappSub.textContent = 'פשוט וקל!';
+          }
+          whatsappBtn.appendChild(whatsappSub);
+        }
+      }
+
+      [smsBtn, saveBtn].forEach(btn => {
+        if (!btn) return;
+        btn.disabled = isClosed;
+        btn.style.opacity = isClosed ? '0.65' : '';
       });
+    }
+
+    function refreshOrderingAvailability(){
+      const { isClosed, nextOpen } = getOrderingAvailability();
+      const statusEl = document.getElementById('orderingStatus');
+      updateClosedButtonsState(isClosed, nextOpen);
 
       if (!statusEl) return;
 
@@ -1829,6 +1889,21 @@
         : 'ההזמנות פתוחות כעת. ניתן לבצע הזמנות עד יום שלישי בשעה 22:00.';
     }
 
+
+    function showOrderingClosedModal(nextOpen){
+      const modal = document.getElementById('orderingClosedModal');
+      const subtitle = document.getElementById('orderingClosedSubtitle');
+      const nextOpenEl = document.getElementById('orderingClosedNextOpen');
+      if (!modal || !subtitle || !nextOpenEl) return;
+      subtitle.textContent = 'כרגע לא ניתן לבצע הזמנה חדשה.';
+      nextOpenEl.textContent = `נפתח שוב בעוד ${getTimeUntilOpenText(nextOpen)} • ${formatNextOpening(nextOpen)}`;
+      modal.classList.remove('hidden');
+    }
+
+    function closeOrderingClosedModal(){
+      const modal = document.getElementById('orderingClosedModal');
+      if (modal) modal.classList.add('hidden');
+    }
 
     function getPaymentLabel(payment){
       return payment === 'bit' ? 'ביט' : 'מזומן';
@@ -1945,9 +2020,7 @@
       el.value = value;
       animatePriceBadge(id);
       updateSummary();
-    refreshOrderingAvailability();
-    setInterval(refreshOrderingAvailability, 60000);
-    syncDeliveryButtonUi();
+      syncDeliveryButtonUi();
     }
 
 
@@ -2275,7 +2348,7 @@
       const orderingState = getOrderingAvailability();
       if (orderingState.isClosed){
         refreshOrderingAvailability();
-        alert(`ההזמנות סגורות כעת. ניתן לבצע הזמנות שוב החל מ-${formatNextOpening(orderingState.nextOpen)}.`);
+        showOrderingClosedModal(orderingState.nextOpen);
         return null;
       }
 
@@ -2622,6 +2695,8 @@ function getStoredOrders(){
     handlePhoneInput();
     toggleAddress();
     updateSummary();
+    refreshOrderingAvailability();
+    setInterval(refreshOrderingAvailability, 1000);
     syncDeliveryButtonUi();
     renderOrders();
     setPayment(getPayment());
