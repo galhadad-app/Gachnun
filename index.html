@@ -372,9 +372,10 @@
 
     .delivery-meta{
       display:flex;
-      flex-wrap:wrap;
-      gap:8px;
+      flex-direction:column;
+      gap:6px;
       margin-top:8px;
+      align-items:flex-start;
     }
 
     .delivery-pill{
@@ -546,7 +547,11 @@
       filter:drop-shadow(0 18px 28px rgba(22,163,74,.24));
     }
 
-    .delivery-btn-label{
+    
+.delivery-btn-label.off{ color:#16a34a; }
+.delivery-btn-label.on{ color:#dc2626; }
+
+.delivery-btn-label{
       margin-top:2px;
       font-size:14px;
       font-weight:900;
@@ -570,7 +575,11 @@
       transition:all .22s ease;
     }
 
-    .delivery-image-btn.active .delivery-btn-label{
+    .delivery-image-btn.active 
+.delivery-btn-label.off{ color:#16a34a; }
+.delivery-btn-label.on{ color:#dc2626; }
+
+.delivery-btn-label{
       color:#166534;
       transform:translateY(-1px);
     }
@@ -1231,6 +1240,18 @@
     }
 
     @media (max-width:760px){
+
+      .delivery-box{
+        display:flex;
+        flex-direction:row;
+        align-items:flex-start;
+      }
+
+      .delivery-toggle-visual{
+        margin-right:0;
+        margin-left:auto;
+      }
+
       .app{
         padding:14px 10px 34px;
       }
@@ -1374,7 +1395,11 @@
       .delivery-bike-img{
         width:90px;
       }
-      .delivery-btn-label{
+      
+.delivery-btn-label.off{ color:#16a34a; }
+.delivery-btn-label.on{ color:#dc2626; }
+
+.delivery-btn-label{
         font-size:13px;
       }
       .delivery-btn-status{
@@ -1410,6 +1435,18 @@
 }
 
 @media (max-width:760px){
+
+      .delivery-box{
+        display:flex;
+        flex-direction:row;
+        align-items:flex-start;
+      }
+
+      .delivery-toggle-visual{
+        margin-right:0;
+        margin-left:auto;
+      }
+
   .food-thumb{
     width:95px !important;
     height:95px !important;
@@ -1818,14 +1855,35 @@
       }
     }
 
-    function toggleDeliveryImageButton(){
-      const checkbox = document.getElementById("delivery");
-      if (!checkbox || checkbox.disabled) return;
-      checkbox.checked = !checkbox.checked;
-      toggleAddress();
-      updateSummary();
-    syncDeliveryButtonUi();
-    }
+    
+function toggleDeliveryImageButton() {
+  const checkbox = document.getElementById("delivery");
+  const btn = document.getElementById("deliveryImageBtn");
+  const status = btn.querySelector(".delivery-btn-status");
+  const label = btn.querySelector(".delivery-btn-label");
+
+  checkbox.checked = !checkbox.checked;
+
+  if (checkbox.checked) {
+    btn.classList.add("active");
+    btn.setAttribute("aria-pressed", "true");
+    status.innerText = "משלוח מופעל";
+    label.innerText = "לחץ לביטול משלוח";
+    label.classList.remove("off");
+    label.classList.add("on");
+  } else {
+    btn.classList.remove("active");
+    btn.setAttribute("aria-pressed", "false");
+    status.innerText = "משלוח כבוי";
+    label.innerText = "לחץ למשלוח";
+    label.classList.remove("on");
+    label.classList.add("off");
+  }
+
+  toggleAddress();
+  updateSummary();
+}
+
 
     function toggleAddress(forceShow = null){
       const show = forceShow !== null ? forceShow : document.getElementById("delivery").checked;
@@ -2444,5 +2502,10 @@ window.addEventListener('touchstart', startMusicOnce, { once: true });
 window.addEventListener('click', startMusicOnce, { once: true });
 </script>
 
-</body>
+<script>
+window.addEventListener("load", () => {
+  const label = document.querySelector(".delivery-btn-label");
+  if(label){ label.classList.add("off"); }
+});
+</script></body>
 </html>
