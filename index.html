@@ -406,9 +406,20 @@
     
     .switch-row{
       display:flex;
+      flex-direction:column;
       align-items:center;
       justify-content:center;
+      gap:8px;
       flex:0 0 auto;
+    }
+
+    .delivery-label{
+      font-size:13px;
+      font-weight:800;
+      color:#92400e;
+      text-align:center;
+      line-height:1.2;
+      user-select:none;
     }
 
     .delivery-toggle-native{
@@ -421,6 +432,9 @@
 
     .delivery-scooter{
       --scooter-glow: rgba(250,204,21,.95);
+      width:140px;
+      height:100px;
+      margin-top:10px;
       --scooter-ring: rgba(250,204,21,.24);
       appearance:none;
       -webkit-appearance:none;
@@ -428,8 +442,8 @@
       background:transparent;
       padding:0;
       margin:0;
-      width:110px;
-      height:78px;
+      width:148px;
+      height:104px;
       position:relative;
       display:inline-flex;
       align-items:center;
@@ -1361,13 +1375,13 @@
       }
 
       .delivery-scooter{
-        width:86px;
-        height:64px;
+        width:112px;
+        height:82px;
       }
       .delivery-scooter .speed-lines,
       .delivery-scooter .speed-lines::before,
       .delivery-scooter .speed-lines::after{
-        right:54px;
+        right:72px;
       }
       .modal-card h3{font-size:26px}
       .secondary-actions{grid-template-columns:1fr}
@@ -1440,7 +1454,7 @@
                          </div>
             </div>
             <div class="qty-box">
-              <button class="qty-btn" type="button" onclick="changeQty('jachnun', 1)">+</button>
+              <button class="qty-btn" type="button" onclick="changeQty('jachnun', 1)">+</button><div style='text-align:center;font-weight:800;font-size:13px;margin-top:6px'>לחץ למשלוח</div>
               <input class="qty-input" id="jachnun" data-product="jachnun" type="number" min="0" value="0" onchange="normalizeQty('jachnun'); animatePriceBadge('jachnun'); updateSummary();" />
               <button class="qty-btn" type="button" onclick="changeQty('jachnun', -1)">−</button>
             </div>
@@ -1504,6 +1518,7 @@
               <span class="speed-lines" aria-hidden="true"></span>
               <img class="scooter-img" src="delivery-scooter.png" alt="משלוח">
             </button>
+            <div class="delivery-label">לחץ למשלוח</div>
           </div>
         </div>
 
