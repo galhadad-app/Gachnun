@@ -923,6 +923,39 @@
 
     .main-btn:hover,.wa-btn:hover,.save-btn:hover,.chip-btn:hover,.modal-btn:hover{filter:brightness(.98)}
 
+    .ordering-status{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      font-size:14px;
+      font-weight:800;
+      line-height:1.5;
+      display:none;
+    }
+
+    .ordering-status.open{
+      display:block;
+      background:#ecfdf5;
+      border:1px solid #bbf7d0;
+      color:#166534;
+    }
+
+    .ordering-status.closed{
+      display:block;
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      color:#9a3412;
+    }
+
+    .main-btn:disabled,
+    .sms-btn:disabled,
+    .save-btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+      filter:grayscale(.1);
+      box-shadow:none;
+    }
+
     .admin-toggle{margin-top:16px}
     .admin-panel.hidden,.address-fields.hidden,.modal.hidden,.confetti-layer.hidden{display:none}
 
@@ -1603,6 +1636,7 @@
             <textarea id="notes" placeholder="קומה, דירה, שער, נקודת ציון וכד׳"></textarea>
           </div>
         </div>
+        <div id="orderingStatus" class="ordering-status open">ההזמנות פתוחות כעת.</div>
       </section>
 
       <section class="card">
@@ -1666,10 +1700,10 @@
         </div>
 
         <div class="actions">
-          <button class="main-btn" type="button" onclick="sendWhatsAppOrder()">בצע הזמנה בוואטסאפ<span class="btn-sub">פשוט וקל!</span></button>
+          <button id="orderWhatsAppBtn" class="main-btn" type="button" onclick="sendWhatsAppOrder()">בצע הזמנה בוואטסאפ<span class="btn-sub">פשוט וקל!</span></button>
           <div class="secondary-actions">
-            <button class="sms-btn" type="button" onclick="sendSmsOrder()">הזמנה ב-SMS</button>
-            <button class="save-btn" type="button" onclick="saveOrder()">שמור הזמנה במערכת</button>
+            <button id="orderSmsBtn" class="sms-btn" type="button" onclick="sendSmsOrder()">הזמנה ב-SMS</button>
+            <button id="orderSaveBtn" class="save-btn" type="button" onclick="saveOrder()">שמור הזמנה במערכת</button>
             <button class="wa-btn" type="button" onclick="openWhatsApp()">מעבר לוואטסאפ העסק</button>
           </div>
         </div>
@@ -1750,6 +1784,50 @@
 
     let successModalAction = null;
     let successModalWhatsAppUrl = "";
+
+    function getOrderingAvailability(now = new Date()){
+      const day = now.getDay(); // 0=Sunday ... 6=Saturday
+      const minutes = now.getHours() * 60 + now.getMinutes();
+      const isClosed = day === 3 || day === 4 || day === 5 || day === 6 || (day === 2 && minutes >= (22 * 60));
+
+      const nextOpen = new Date(now);
+      if (isClosed){
+        const daysUntilSunday = (7 - day) % 7 || 7;
+        nextOpen.setDate(now.getDate() + daysUntilSunday);
+        nextOpen.setHours(0, 0, 0, 0);
+      }
+
+      return { isClosed, nextOpen };
+    }
+
+    function formatNextOpening(date){
+      return date.toLocaleString('he-IL', {
+        weekday: 'long',
+        day: '2-digit',
+        month: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function refreshOrderingAvailability(){
+      const { isClosed, nextOpen } = getOrderingAvailability();
+      const statusEl = document.getElementById('orderingStatus');
+      const whatsappBtn = document.getElementById('orderWhatsAppBtn');
+      const smsBtn = document.getElementById('orderSmsBtn');
+      const saveBtn = document.getElementById('orderSaveBtn');
+
+      [whatsappBtn, smsBtn, saveBtn].forEach(btn => {
+        if (btn) btn.disabled = isClosed;
+      });
+
+      if (!statusEl) return;
+
+      statusEl.className = 'ordering-status ' + (isClosed ? 'closed' : 'open');
+      statusEl.textContent = isClosed
+        ? `ההזמנות סגורות כעת. ניתן לבצע הזמנות שוב החל מ-${formatNextOpening(nextOpen)}.`
+        : 'ההזמנות פתוחות כעת. ניתן לבצע הזמנות עד יום שלישי בשעה 22:00.';
+    }
 
 
     function getPaymentLabel(payment){
@@ -1867,6 +1945,8 @@
       el.value = value;
       animatePriceBadge(id);
       updateSummary();
+    refreshOrderingAvailability();
+    setInterval(refreshOrderingAvailability, 60000);
     syncDeliveryButtonUi();
     }
 
@@ -2192,6 +2272,13 @@
     }
 
     function validateOrder(){
+      const orderingState = getOrderingAvailability();
+      if (orderingState.isClosed){
+        refreshOrderingAvailability();
+        alert(`ההזמנות סגורות כעת. ניתן לבצע הזמנות שוב החל מ-${formatNextOpening(orderingState.nextOpen)}.`);
+        return null;
+      }
+
       const name = document.getElementById("customerName").value.trim();
       const phone = sanitizePhone(document.getElementById("customerPhone").value);
       document.getElementById("customerPhone").value = phone;
@@ -2296,12 +2383,38 @@ function getStoredOrders(){
 
       if (existingIndex >= 0){
         order.id = orders[existingIndex].id;
-        orders[existingIndex] = order;
+        orders[existingIndex] = {
+          ...orders[existingIndex],
+          ...order,
+          updatedAt: new Date().toLocaleString("he-IL")
+        };
       } else {
-        orders.unshift(order);
+        orders.unshift({
+          ...order,
+          createdAt: order.createdAt || new Date().toLocaleString("he-IL"),
+          updatedAt: new Date().toLocaleString("he-IL")
+        });
       }
 
       localStorage.setItem("gachnun_orders_v5", JSON.stringify(orders));
+    }
+
+    function finalizeOutgoingOrder(order, mode){
+      const submittedViaMap = {
+        whatsapp: 'וואטסאפ',
+        sms: 'SMS',
+        save: 'שמירה ידנית'
+      };
+
+      const orderToSave = {
+        ...order,
+        submittedVia: submittedViaMap[mode] || 'מערכת'
+      };
+
+      saveOrderToStorage(orderToSave);
+      renderOrders();
+      clearCurrentDraftOrder();
+      return orderToSave;
     }
 
     let isSubmittingOrder = false;
@@ -2313,23 +2426,19 @@ function getStoredOrders(){
       if (!order) return;
 
       isSubmittingOrder = true;
-      const whatsappUrl = `https://wa.me/${PHONE_NUMBER}?text=${buildWhatsAppText(order)}`;
+      const savedOrder = finalizeOutgoingOrder(order, 'whatsapp');
+      const whatsappUrl = `https://wa.me/${PHONE_NUMBER}?text=${buildWhatsAppText(savedOrder)}`;
 
-      saveOrderToStorage(order);
-      renderOrders();
-
-      showOrderSuccessModal(order, 'whatsapp', whatsappUrl);
+      showOrderSuccessModal(savedOrder, 'whatsapp', whatsappUrl);
     }
 
     function sendSmsOrder(){
       const order = validateOrder();
       if (!order) return;
 
-      saveOrderToStorage(order);
-      renderOrders();
-
+      const savedOrder = finalizeOutgoingOrder(order, 'sms');
       const smsNumber = "0523971954";
-      const smsBody = buildSmsText(order);
+      const smsBody = buildSmsText(savedOrder);
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       const separator = isIOS ? '&' : '?';
 
@@ -2370,10 +2479,9 @@ function getStoredOrders(){
     function saveOrder(){
       const order = validateOrder();
       if (!order) return;
-      saveOrderToStorage(order);
-      renderOrders();
+      const savedOrder = finalizeOutgoingOrder(order, 'save');
 
-      showOrderSuccessModal(order, 'save');
+      showOrderSuccessModal(savedOrder, 'save');
     }
 
     function openWhatsApp(){
@@ -2463,6 +2571,7 @@ function getStoredOrders(){
               <div class="small">מספר הזמנה: ${order.orderNumber || "-"}</div>
               <div class="small">${order.phone}</div>
               <div class="small">אמצעי תשלום: ${order.payment === 'bit' ? 'ביט' : 'מזומן'}</div>
+              <div class="small">נשלח דרך: ${order.submittedVia || 'מערכת'}</div>
             </div>
             <div><span class="badge">${order.createdAt}</span></div>
           </div>
